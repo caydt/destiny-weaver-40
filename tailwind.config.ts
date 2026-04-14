@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
+        heading: ['"Noto Serif KR"', 'serif'],
         serif: ['"Noto Serif KR"', 'serif'],
         sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
       },
@@ -51,6 +52,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        surface: "hsl(var(--surface))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
