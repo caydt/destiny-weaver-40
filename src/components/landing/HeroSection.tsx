@@ -18,9 +18,10 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background to-background" />
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl" />
+      {/* Background image */}
+      <img src={heroBg} alt="" className="absolute inset-0 w-full h-full object-cover" width={1920} height={1080} />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-background/60" />
       <div className="absolute top-1/3 right-1/4 w-[200px] h-[200px] rounded-full bg-accent/5 blur-2xl" />
 
       <div className="relative z-10 container mx-auto px-4 text-center max-w-3xl">
