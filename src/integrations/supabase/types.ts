@@ -14,7 +14,166 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      consultations: {
+        Row: {
+          birth_date: string
+          birth_time: string | null
+          birth_time_unknown: boolean | null
+          calendar_type: string | null
+          created_at: string
+          gender: string | null
+          id: string
+          is_leap_month: boolean | null
+          name: string
+          package_id: string | null
+          question: string
+          status: string | null
+        }
+        Insert: {
+          birth_date: string
+          birth_time?: string | null
+          birth_time_unknown?: boolean | null
+          calendar_type?: string | null
+          created_at?: string
+          gender?: string | null
+          id?: string
+          is_leap_month?: boolean | null
+          name: string
+          package_id?: string | null
+          question: string
+          status?: string | null
+        }
+        Update: {
+          birth_date?: string
+          birth_time?: string | null
+          birth_time_unknown?: boolean | null
+          calendar_type?: string | null
+          created_at?: string
+          gender?: string | null
+          id?: string
+          is_leap_month?: boolean | null
+          name?: string
+          package_id?: string | null
+          question?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultations_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      packages: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          price: number
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          price: number
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          price?: number
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      payment_links: {
+        Row: {
+          id: string
+          package_id: string | null
+          updated_at: string | null
+          url: string | null
+        }
+        Insert: {
+          id?: string
+          package_id?: string | null
+          updated_at?: string | null
+          url?: string | null
+        }
+        Update: {
+          id?: string
+          package_id?: string | null
+          updated_at?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_links_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          author: string
+          content: string
+          created_at: string
+          id: string
+          is_visible: boolean | null
+          rating: number | null
+        }
+        Insert: {
+          author: string
+          content: string
+          created_at?: string
+          id?: string
+          is_visible?: boolean | null
+          rating?: number | null
+        }
+        Update: {
+          author?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_visible?: boolean | null
+          rating?: number | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          hero_headline: string | null
+          hero_subtext: string | null
+          id: string
+          upsell_text: string | null
+        }
+        Insert: {
+          hero_headline?: string | null
+          hero_subtext?: string | null
+          id?: string
+          upsell_text?: string | null
+        }
+        Update: {
+          hero_headline?: string | null
+          hero_subtext?: string | null
+          id?: string
+          upsell_text?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
