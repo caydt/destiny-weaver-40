@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -79,6 +79,16 @@ const FormSection = () => {
   const calendarType = form.watch('calendarType');
   const birthTimeUnknown = form.watch('birthTimeUnknown');
   const selectedPackageId = form.watch('packageId');
+
+  // Listen for package selection from PackagesSection
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const pkgId = (e as CustomEvent).detail;
+      if (pkgId) form.setValue('packageId', pkgId);
+    };
+    window.addEventListener('select-package', handler);
+    return () => window.removeEventListener('select-package', handler);
+  }, [form]);
 
   const { data: packages } = useQuery({
     queryKey: ['packages-form'],
