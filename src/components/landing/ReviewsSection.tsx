@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Star } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useRef, useState, useEffect } from 'react';
 
 const ReviewsSection = () => {
@@ -8,14 +9,15 @@ const ReviewsSection = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const { data: reviews } = useQuery({
+  const { data: reviews, isLoading } = useQuery({
     queryKey: ['reviews'],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('reviews')
         .select('*')
         .eq('is_visible', true)
         .order('created_at', { ascending: false });
+      if (error) throw error;
       return data ?? [];
     },
   });
@@ -35,6 +37,27 @@ const ReviewsSection = () => {
     scrollRef.current?.scrollBy({ left: dir === 'left' ? -320 : 320, behavior: 'smooth' });
   };
 
+  if (isLoading) {
+    return (
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <Skeleton className="h-10 w-36 mx-auto mb-4" />
+          <Skeleton className="h-5 w-64 mx-auto mb-12" />
+          <div className="flex gap-6 overflow-hidden">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="min-w-[300px] p-6 rounded-lg border border-border bg-card space-y-3">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-16" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (!reviews?.length) return null;
 
   return (
@@ -49,7 +72,7 @@ const ReviewsSection = () => {
 
         <div className="relative">
           {canScrollLeft && (
-            <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors">
+            <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="이전 후기">
               ‹
             </button>
           )}
@@ -82,7 +105,7 @@ const ReviewsSection = () => {
           </div>
 
           {canScrollRight && (
-            <button onClick={() => scroll('right')} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors">
+            <button onClick={() => scroll('right')} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="다음 후기">
               ›
             </button>
           )}

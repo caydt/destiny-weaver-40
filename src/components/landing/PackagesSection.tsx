@@ -1,28 +1,51 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 const PackagesSection = () => {
-  const { data: packages } = useQuery({
+  const { data: packages, isLoading } = useQuery({
     queryKey: ['packages'],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('packages')
         .select('*')
         .eq('is_active', true)
         .order('sort_order');
+      if (error) throw error;
       return data ?? [];
     },
   });
 
-  if (!packages?.length) return null;
-
   const handleSelect = (pkgId: string) => {
-    // Dispatch custom event so FormSection can pick it up
     window.dispatchEvent(new CustomEvent('select-package', { detail: pkgId }));
     document.getElementById('form-section')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  if (isLoading) {
+    return (
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <Skeleton className="h-10 w-48 mx-auto mb-4" />
+          <Skeleton className="h-5 w-72 mx-auto mb-12" />
+          <div className="grid gap-6 md:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="p-6 rounded-xl border border-border bg-surface space-y-4">
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-10 w-20" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!packages?.length) return null;
 
   const gridClass = cn(
     'grid gap-6',
