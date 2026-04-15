@@ -90,7 +90,7 @@ const FormSection = () => {
     return () => window.removeEventListener('select-package', handler);
   }, [form]);
 
-  const { data: packages } = useQuery({
+  const { data: packages, isLoading: packagesLoading } = useQuery({
     queryKey: ['packages-form'],
     queryFn: async () => {
       const { data } = await supabase
@@ -119,18 +119,22 @@ const FormSection = () => {
 
       if (error) throw error;
 
-      // Fetch upsell data
-      const [settingsRes, linkRes] = await Promise.all([
-        supabase.from('site_settings').select('upsell_text').limit(1).single(),
-        supabase.from('payment_links').select('url').eq('package_id', values.packageId).limit(1).single(),
-      ]);
-
-      setUpsellText(settingsRes.data?.upsell_text || '');
-      setPaymentUrl(linkRes.data?.url || null);
-      setUpsellOpen(true);
-
+      // DB 저장 성공 — 즉시 사용자에게 알림
       toast.success('신청이 완료됐습니다!');
       form.reset();
+
+      // upsell 데이터는 별도 처리 — 실패해도 중복 신청 안내 없음
+      try {
+        const [settingsRes, linkRes] = await Promise.all([
+          supabase.from('site_settings').select('upsell_text').limit(1).single(),
+          supabase.from('payment_links').select('url').eq('package_id', values.packageId).limit(1).single(),
+        ]);
+        setUpsellText(settingsRes.data?.upsell_text || '');
+        setPaymentUrl(linkRes.data?.url || null);
+        setUpsellOpen(true);
+      } catch {
+        // upsell fetch 실패는 무시 — 신청은 이미 완료됨
+      }
     } catch {
       toast.error('신청 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
@@ -392,7 +396,17 @@ const FormSection = () => {
                     <FormLabel>패키지 선택</FormLabel>
                     <FormControl>
                       <div className="grid gap-3">
-                        {packages?.map((pkg) => (
+                        {packagesLoading && (
+                          <>
+                            {[1, 2, 3].map((i) => (
+                              <div
+                                key={i}
+                                className="h-[68px] rounded-lg border border-border bg-muted/30 animate-pulse"
+                              />
+                            ))}
+                          </>
+                        )}
+                        {!packagesLoading && packages?.map((pkg) => (
                           <button
                             key={pkg.id}
                             type="button"

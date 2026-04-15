@@ -16,13 +16,13 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) navigate('/admin/login');
-      else setLoading(false);
-    });
-
+    // onAuthStateChange가 초기 세션 상태도 즉시 emit하므로 단독 사용
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) navigate('/admin/login');
+      if (!session) {
+        navigate('/admin/login');
+      } else {
+        setLoading(false);
+      }
     });
 
     return () => subscription.unsubscribe();

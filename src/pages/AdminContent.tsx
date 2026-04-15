@@ -7,6 +7,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import { Pencil, Save, Trash2, Plus, Star } from 'lucide-react';
 import type { Tables } from '@/integrations/supabase/types';
@@ -218,6 +228,7 @@ const ReviewsSection = () => {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [editReview, setEditReview] = useState<Tables<'reviews'> | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [form, setForm] = useState({ author: '', content: '', rating: 5 });
 
   const { data: reviews = [] } = useQuery({
@@ -292,6 +303,27 @@ const ReviewsSection = () => {
         </DialogContent>
       </Dialog>
 
+      {/* 삭제 확인 다이얼로그 */}
+      <AlertDialog open={!!deleteTargetId} onOpenChange={(v) => !v && setDeleteTargetId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>후기를 삭제하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>
+              삭제된 후기는 복구할 수 없습니다.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => { if (deleteTargetId) deleteReview.mutate(deleteTargetId); setDeleteTargetId(null); }}
+            >
+              삭제
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="space-y-3">
         {reviews.map((r) => (
           <div key={r.id} className={`p-4 rounded-lg border border-border bg-card flex items-start justify-between gap-4 ${!r.is_visible ? 'opacity-40' : ''}`}>
@@ -305,7 +337,7 @@ const ReviewsSection = () => {
             <div className="flex items-center gap-1 shrink-0">
               <Switch checked={r.is_visible ?? true} onCheckedChange={() => toggleVisibility(r)} />
               <Button size="icon" variant="ghost" onClick={() => setEditReview(r)}><Pencil className="w-4 h-4" /></Button>
-              <Button size="icon" variant="ghost" onClick={() => { if (confirm('삭제하시겠습니까?')) deleteReview.mutate(r.id); }}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+              <Button size="icon" variant="ghost" onClick={() => setDeleteTargetId(r.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
             </div>
           </div>
         ))}

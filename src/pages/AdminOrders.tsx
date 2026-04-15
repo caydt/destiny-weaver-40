@@ -35,6 +35,41 @@ const statusConfig: Record<Status, { label: string; className: string }> = {
 
 const statusOptions: Status[] = ['pending', 'in_progress', 'done'];
 
+// 컴포넌트 외부에 정의 — AdminOrders 리렌더 시 remount 방지
+const StatusBadge = ({
+  id,
+  status,
+  onUpdate,
+}: {
+  id: string;
+  status: Status;
+  onUpdate: (id: string, status: Status) => void;
+}) => {
+  const config = statusConfig[status] || statusConfig.pending;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button>
+          <Badge variant="outline" className={cn('cursor-pointer border', config.className)}>
+            {config.label}
+          </Badge>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {statusOptions.map((s) => (
+          <DropdownMenuItem
+            key={s}
+            onClick={() => onUpdate(id, s)}
+            className={cn(s === status && 'font-bold')}
+          >
+            {statusConfig[s].label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 const AdminOrders = () => {
   const queryClient = useQueryClient();
 
@@ -65,30 +100,8 @@ const AdminOrders = () => {
     onError: () => toast.error('상태 변경에 실패했습니다.'),
   });
 
-  const StatusBadge = ({ id, status }: { id: string; status: Status }) => {
-    const config = statusConfig[status] || statusConfig.pending;
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button>
-            <Badge variant="outline" className={cn('cursor-pointer border', config.className)}>
-              {config.label}
-            </Badge>
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {statusOptions.map((s) => (
-            <DropdownMenuItem
-              key={s}
-              onClick={() => updateStatus.mutate({ id, status: s })}
-              className={cn(s === status && 'font-bold')}
-            >
-              {statusConfig[s].label}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
+  const handleStatusUpdate = (id: string, status: Status) => {
+    updateStatus.mutate({ id, status });
   };
 
   const truncate = (text: string, max: number) =>
@@ -153,7 +166,7 @@ const AdminOrders = () => {
                   </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <StatusBadge id={c.id} status={(c.status as Status) || 'pending'} />
+                  <StatusBadge id={c.id} status={(c.status as Status) || 'pending'} onUpdate={handleStatusUpdate} />
                 </TableCell>
               </TableRow>
             ))}
@@ -174,7 +187,7 @@ const AdminOrders = () => {
           <div key={c.id} className="p-4 rounded-xl bg-surface border border-border space-y-2">
             <div className="flex items-center justify-between">
               <span className="font-semibold">{c.name}</span>
-              <StatusBadge id={c.id} status={(c.status as Status) || 'pending'} />
+              <StatusBadge id={c.id} status={(c.status as Status) || 'pending'} onUpdate={handleStatusUpdate} />
             </div>
             <div className="text-sm text-muted-foreground space-y-1">
               <p>
