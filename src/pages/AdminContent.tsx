@@ -26,7 +26,7 @@ import type { Tables } from '@/integrations/supabase/types';
 const SiteSettingsSection = () => {
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState({ hero_headline: '', hero_subtext: '', upsell_text: '' });
+  const [form, setForm] = useState({ brand_name: '', hero_headline: '', hero_subtext: '', upsell_text: '' });
 
   const { data } = useQuery({
     queryKey: ['site-settings'],
@@ -38,7 +38,12 @@ const SiteSettingsSection = () => {
   });
 
   useEffect(() => {
-    if (data) setForm({ hero_headline: data.hero_headline ?? '', hero_subtext: data.hero_subtext ?? '', upsell_text: data.upsell_text ?? '' });
+    if (data) setForm({
+      brand_name: data.brand_name ?? '',
+      hero_headline: data.hero_headline ?? '',
+      hero_subtext: data.hero_subtext ?? '',
+      upsell_text: data.upsell_text ?? '',
+    });
   }, [data]);
 
   const save = useMutation({
@@ -61,7 +66,7 @@ const SiteSettingsSection = () => {
         )}
       </div>
       <div className="space-y-3">
-        {([['hero_headline', '히어로 헤드라인'], ['hero_subtext', '히어로 서브텍스트'], ['upsell_text', '업셀 텍스트']] as const).map(([key, label]) => (
+        {([['brand_name', '브랜드명 (푸터 카피라이트 등 노출용)'], ['hero_headline', '히어로 헤드라인'], ['hero_subtext', '히어로 서브텍스트'], ['upsell_text', '업셀 텍스트']] as const).map(([key, label]) => (
           <div key={key}>
             <Label className="text-muted-foreground text-xs">{label}</Label>
             {key === 'upsell_text' ? (

@@ -156,6 +156,7 @@ export type Database = {
       site_settings: {
         Row: {
           address: string | null
+          brand_name: string | null
           business_name: string | null
           business_number: string | null
           email: string | null
@@ -170,6 +171,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          brand_name?: string | null
           business_name?: string | null
           business_number?: string | null
           email?: string | null
@@ -184,6 +186,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          brand_name?: string | null
           business_name?: string | null
           business_number?: string | null
           email?: string | null
