@@ -53,6 +53,7 @@ const SiteSettingsSection = () => {
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['site-settings'] }); setEditing(false); toast.success('저장되었습니다.'); },
+    onError: (err: Error) => { console.error('site_settings update failed', err); toast.error(`저장 실패: ${err.message}`); },
   });
 
   return (
@@ -140,6 +141,10 @@ const BusinessInfoSection = () => {
       setEditing(false);
       toast.success('저장되었습니다.');
     },
+    onError: (err: Error) => {
+      console.error('site_settings (business info) update failed', err);
+      toast.error(`저장 실패: ${err.message}`);
+    },
   });
 
   return (
@@ -189,6 +194,7 @@ const PackagesSection = () => {
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-packages'] }); toast.success('패키지가 수정되었습니다.'); },
+    onError: (err: Error) => { console.error('package update failed', err); toast.error(`패키지 수정 실패: ${err.message}`); },
   });
 
   const add = useMutation({
@@ -197,6 +203,7 @@ const PackagesSection = () => {
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-packages'] }); toast.success('패키지가 추가되었습니다.'); },
+    onError: (err: Error) => { console.error('package add failed', err); toast.error(`패키지 추가 실패: ${err.message}`); },
   });
 
   return (
@@ -286,6 +293,7 @@ const PaymentLinksSection = () => {
       }
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['payment-links'] }); toast.success('결제 링크가 저장되었습니다.'); },
+    onError: (err: Error) => { console.error('payment link save failed', err); toast.error(`결제 링크 저장 실패: ${err.message}`); },
   });
 
   return (
@@ -340,6 +348,7 @@ const ReviewsSection = () => {
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-reviews'] }); setOpen(false); setForm({ author: '', content: '', rating: 5 }); toast.success('후기가 등록되었습니다.'); },
+    onError: (err: Error) => { console.error('review create failed', err); toast.error(`후기 등록 실패: ${err.message}`); },
   });
 
   const updateReview = useMutation({
@@ -348,6 +357,7 @@ const ReviewsSection = () => {
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-reviews'] }); setEditReview(null); toast.success('후기가 수정되었습니다.'); },
+    onError: (err: Error) => { console.error('review edit failed', err); toast.error(`후기 수정 실패: ${err.message}`); },
   });
 
   const deleteReview = useMutation({
@@ -356,6 +366,7 @@ const ReviewsSection = () => {
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-reviews'] }); toast.success('후기가 삭제되었습니다.'); },
+    onError: (err: Error) => { console.error('review delete failed', err); toast.error(`후기 삭제 실패: ${err.message}`); },
   });
 
   const toggleVisibility = (r: Tables<'reviews'>) => {
