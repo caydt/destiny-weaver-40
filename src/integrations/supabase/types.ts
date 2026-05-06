@@ -155,21 +155,45 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          address: string | null
+          business_name: string | null
+          business_number: string | null
+          email: string | null
           hero_headline: string | null
           hero_subtext: string | null
           id: string
+          mailorder_number: string | null
+          owner: string | null
+          phone: string | null
+          privacy_officer: string | null
           upsell_text: string | null
         }
         Insert: {
+          address?: string | null
+          business_name?: string | null
+          business_number?: string | null
+          email?: string | null
           hero_headline?: string | null
           hero_subtext?: string | null
           id?: string
+          mailorder_number?: string | null
+          owner?: string | null
+          phone?: string | null
+          privacy_officer?: string | null
           upsell_text?: string | null
         }
         Update: {
+          address?: string | null
+          business_name?: string | null
+          business_number?: string | null
+          email?: string | null
           hero_headline?: string | null
           hero_subtext?: string | null
           id?: string
+          mailorder_number?: string | null
+          owner?: string | null
+          phone?: string | null
+          privacy_officer?: string | null
           upsell_text?: string | null
         }
         Relationships: []
