@@ -33,11 +33,11 @@ const FooterSection = () => {
           <p className="text-sm font-semibold text-foreground/90">{brandName}</p>
         )}
         {visible.length > 0 && (
-          <div className="text-xs text-muted-foreground/80 leading-relaxed flex flex-wrap justify-center gap-x-3 gap-y-1">
+          <div className="text-xs text-muted-foreground/80 leading-relaxed flex flex-col items-center gap-y-0.5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-3 sm:gap-y-1">
             {visible.map(([label, value]) => (
-              <span key={label}>
+              <span key={label} className="sm:whitespace-nowrap">
                 <span className="text-muted-foreground/60">{label}</span>{' '}
-                <span>{value}</span>
+                <span className="break-keep">{value}</span>
               </span>
             ))}
           </div>
