@@ -31,9 +31,9 @@ const Admin = () => {
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">로딩 중...</div>;
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <aside className="w-64 border-r border-border p-4 flex flex-col gap-2">
-        <h2 className="text-lg font-bold mb-6 px-2">관리자</h2>
+    <div className="min-h-screen flex flex-col sm:flex-row bg-background">
+      <aside className="w-full sm:w-64 border-b sm:border-b-0 sm:border-r border-border p-3 sm:p-4 flex flex-row sm:flex-col flex-wrap items-center sm:items-stretch gap-2">
+        <h2 className="text-lg font-bold mb-2 sm:mb-6 px-2 w-full sm:w-auto">관리자</h2>
         {navItems.map((item) => {
           const active = item.exact
             ? location.pathname === item.to
@@ -42,7 +42,7 @@ const Admin = () => {
             <Link
               key={item.to}
               to={item.to}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+              className={`flex items-center gap-2 sm:gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
                 active ? 'bg-primary/10 text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
@@ -51,7 +51,7 @@ const Admin = () => {
             </Link>
           );
         })}
-        <div className="mt-auto">
+        <div className="ml-auto sm:ml-0 sm:mt-auto">
           <Button
             variant="ghost"
             size="sm"
@@ -63,7 +63,7 @@ const Admin = () => {
           </Button>
         </div>
       </aside>
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-8 min-w-0">
         <Outlet />
       </main>
     </div>

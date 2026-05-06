@@ -126,7 +126,7 @@ const AdminOrders = () => {
       </h1>
 
       {/* Desktop table */}
-      <div className="hidden md:block rounded-xl border border-border overflow-hidden">
+      <div className="hidden md:block rounded-xl border border-border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="bg-surface hover:bg-surface">

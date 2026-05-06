@@ -159,7 +159,7 @@ const BusinessInfoSection = () => {
         )}
       </div>
       <p className="text-xs text-muted-foreground">전자상거래법에 따라 푸터에 표시됩니다. 비워둔 항목은 푸터에 노출되지 않습니다.</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-3">
         {BUSINESS_FIELDS.map(([key, label]) => (
           <div key={key}>
             <Label className="text-muted-foreground text-xs">{label}</Label>
@@ -230,7 +230,7 @@ const PackageRow = ({ pkg, onSave }: { pkg: Tables<'packages'>; onSave: (p: Tabl
 
   return (
     <div className={`p-4 rounded-lg border border-border bg-card space-y-2 ${!local.is_active ? 'opacity-50' : ''}`}>
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_auto_auto] gap-3 items-end">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_auto_auto] gap-3 items-start md:items-end">
         <div>
           <Label className="text-xs text-muted-foreground">이름</Label>
           <Input value={local.name} onChange={(e) => setLocal(p => ({ ...p, name: e.target.value }))} className="mt-1" />
@@ -432,7 +432,7 @@ const ReviewsSection = () => {
 
       <div className="space-y-3">
         {reviews.map((r) => (
-          <div key={r.id} className={`p-4 rounded-lg border border-border bg-card flex items-start justify-between gap-4 ${!r.is_visible ? 'opacity-40' : ''}`}>
+          <div key={r.id} className={`p-4 rounded-lg border border-border bg-card flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 ${!r.is_visible ? 'opacity-40' : ''}`}>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-medium text-sm">{r.author}</span>
@@ -440,7 +440,7 @@ const ReviewsSection = () => {
               </div>
               <p className="text-sm text-muted-foreground line-clamp-2">{r.content}</p>
             </div>
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1 shrink-0 self-end sm:self-auto">
               <Switch checked={r.is_visible ?? true} onCheckedChange={() => toggleVisibility(r)} />
               <Button size="icon" variant="ghost" onClick={() => setEditReview(r)}><Pencil className="w-4 h-4" /></Button>
               <Button size="icon" variant="ghost" onClick={() => setDeleteTargetId(r.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>

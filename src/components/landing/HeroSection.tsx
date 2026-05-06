@@ -30,7 +30,7 @@ const HeroSection = () => {
           <span className="text-sm text-muted-foreground">전통 역학 · 사주 · 운세</span>
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight mb-6 tracking-tight">
           {headline}
         </h1>
 
