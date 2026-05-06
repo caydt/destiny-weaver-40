@@ -22,7 +22,7 @@ const FooterSection = () => {
     ['개인정보보호책임자',  data?.privacy_officer],
   ];
   const visible = items.filter(([, v]) => v && v.trim().length > 0);
-  const copyrightName = data?.business_name?.trim() || '사주 상담';
+  const copyrightName = data?.brand_name?.trim() || data?.business_name?.trim() || '사주 상담';
 
   return (
     <footer className="py-8 px-4 border-t border-border">
