@@ -76,6 +76,95 @@ const SiteSettingsSection = () => {
   );
 };
 
+/* ───── Section 1.5: Business Info ───── */
+
+const BUSINESS_FIELDS = [
+  ['business_name',    '상호 (회사명)'],
+  ['owner',            '대표자명'],
+  ['business_number',  '사업자등록번호'],
+  ['mailorder_number', '통신판매업 신고번호'],
+  ['address',          '사업장 주소'],
+  ['phone',            '대표 전화'],
+  ['email',            '이메일'],
+  ['privacy_officer',  '개인정보보호책임자'],
+] as const;
+
+type BusinessFieldKey = typeof BUSINESS_FIELDS[number][0];
+
+const EMPTY_BUSINESS_FORM: Record<BusinessFieldKey, string> = {
+  business_name: '', owner: '', business_number: '', mailorder_number: '',
+  address: '', phone: '', email: '', privacy_officer: '',
+};
+
+const BusinessInfoSection = () => {
+  const queryClient = useQueryClient();
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState<Record<BusinessFieldKey, string>>(EMPTY_BUSINESS_FORM);
+
+  const { data } = useQuery({
+    queryKey: ['site-settings'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('site_settings').select('*').limit(1).single();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    setForm({
+      business_name:    data.business_name ?? '',
+      owner:            data.owner ?? '',
+      business_number:  data.business_number ?? '',
+      mailorder_number: data.mailorder_number ?? '',
+      address:          data.address ?? '',
+      phone:            data.phone ?? '',
+      email:            data.email ?? '',
+      privacy_officer:  data.privacy_officer ?? '',
+    });
+  }, [data]);
+
+  const save = useMutation({
+    mutationFn: async () => {
+      if (!data) return;
+      const { error } = await supabase.from('site_settings').update(form).eq('id', data.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['site-settings'] });
+      setEditing(false);
+      toast.success('저장되었습니다.');
+    },
+  });
+
+  return (
+    <section className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">사업자정보</h2>
+        {editing ? (
+          <Button size="sm" onClick={() => save.mutate()} disabled={save.isPending}><Save className="w-4 h-4 mr-1" />저장</Button>
+        ) : (
+          <Button size="sm" variant="outline" onClick={() => setEditing(true)}><Pencil className="w-4 h-4 mr-1" />수정</Button>
+        )}
+      </div>
+      <p className="text-xs text-muted-foreground">전자상거래법에 따라 푸터에 표시됩니다. 비워둔 항목은 푸터에 노출되지 않습니다.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {BUSINESS_FIELDS.map(([key, label]) => (
+          <div key={key}>
+            <Label className="text-muted-foreground text-xs">{label}</Label>
+            <Input
+              value={form[key]}
+              onChange={(e) => setForm(p => ({ ...p, [key]: e.target.value }))}
+              disabled={!editing}
+              className="mt-1"
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 /* ───── Section 2: Packages ───── */
 
 const PackagesSection = () => {
@@ -352,6 +441,7 @@ const AdminContent = () => (
   <div className="space-y-10">
     <h1 className="text-2xl font-bold">콘텐츠 관리</h1>
     <SiteSettingsSection />
+    <BusinessInfoSection />
     <PackagesSection />
     <PaymentLinksSection />
     <ReviewsSection />
