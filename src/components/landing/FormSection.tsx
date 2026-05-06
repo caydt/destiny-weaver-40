@@ -418,17 +418,17 @@ const FormSection = () => {
                                 : 'border-border bg-background hover:border-primary/30'
                             )}
                           >
-                            <div className="flex items-center justify-between">
-                              <div>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+                              <div className="min-w-0">
                                 <p className="font-semibold">{pkg.name}</p>
-                                <p className="text-sm text-muted-foreground mt-0.5">{pkg.description}</p>
+                                <p className="text-sm text-muted-foreground mt-0.5 break-keep">{pkg.description}</p>
                               </div>
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
                                 <span className="font-bold text-lg whitespace-nowrap">
                                   {pkg.price.toLocaleString()}원
                                 </span>
                                 <div className={cn(
-                                  'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors',
+                                  'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors shrink-0',
                                   field.value === pkg.id
                                     ? 'border-primary bg-primary'
                                     : 'border-muted-foreground/30'

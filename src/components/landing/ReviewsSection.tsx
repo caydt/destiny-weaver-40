@@ -72,8 +72,8 @@ const ReviewsSection = () => {
 
         <div className="relative">
           {canScrollLeft && (
-            <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="이전 후기">
-              ‹
+            <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-10 sm:h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="이전 후기">
+              <ChevronLeft className="w-5 h-5" />
             </button>
           )}
 
@@ -105,8 +105,8 @@ const ReviewsSection = () => {
           </div>
 
           {canScrollRight && (
-            <button onClick={() => scroll('right')} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="다음 후기">
-              ›
+            <button onClick={() => scroll('right')} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-10 sm:h-10 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors" aria-label="다음 후기">
+              <ChevronRight className="w-5 h-5" />
             </button>
           )}
         </div>
