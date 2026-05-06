@@ -26,7 +26,7 @@ import type { Tables } from '@/integrations/supabase/types';
 const SiteSettingsSection = () => {
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState({ brand_name: '', hero_headline: '', hero_subtext: '', upsell_text: '' });
+  const [form, setForm] = useState({ hero_headline: '', hero_subtext: '', upsell_text: '' });
 
   const { data } = useQuery({
     queryKey: ['site-settings'],
@@ -39,7 +39,6 @@ const SiteSettingsSection = () => {
 
   useEffect(() => {
     if (data) setForm({
-      brand_name: data.brand_name ?? '',
       hero_headline: data.hero_headline ?? '',
       hero_subtext: data.hero_subtext ?? '',
       upsell_text: data.upsell_text ?? '',
@@ -67,7 +66,7 @@ const SiteSettingsSection = () => {
         )}
       </div>
       <div className="space-y-3">
-        {([['brand_name', '브랜드명 (푸터 카피라이트 등 노출용)'], ['hero_headline', '히어로 헤드라인'], ['hero_subtext', '히어로 서브텍스트'], ['upsell_text', '업셀 텍스트']] as const).map(([key, label]) => (
+        {([['hero_headline', '히어로 헤드라인'], ['hero_subtext', '히어로 서브텍스트'], ['upsell_text', '업셀 텍스트']] as const).map(([key, label]) => (
           <div key={key}>
             <Label className="text-muted-foreground text-xs">{label}</Label>
             {key === 'upsell_text' ? (
@@ -85,6 +84,7 @@ const SiteSettingsSection = () => {
 /* ───── Section 1.5: Business Info ───── */
 
 const BUSINESS_FIELDS = [
+  ['brand_name',       '브랜드명 (푸터 노출용)'],
   ['business_name',    '상호 (회사명)'],
   ['owner',            '대표자명'],
   ['business_number',  '사업자등록번호'],
@@ -98,7 +98,7 @@ const BUSINESS_FIELDS = [
 type BusinessFieldKey = typeof BUSINESS_FIELDS[number][0];
 
 const EMPTY_BUSINESS_FORM: Record<BusinessFieldKey, string> = {
-  business_name: '', owner: '', business_number: '', mailorder_number: '',
+  brand_name: '', business_name: '', owner: '', business_number: '', mailorder_number: '',
   address: '', phone: '', email: '', privacy_officer: '',
 };
 
@@ -119,6 +119,7 @@ const BusinessInfoSection = () => {
   useEffect(() => {
     if (!data) return;
     setForm({
+      brand_name:       data.brand_name ?? '',
       business_name:    data.business_name ?? '',
       owner:            data.owner ?? '',
       business_number:  data.business_number ?? '',

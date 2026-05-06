@@ -24,9 +24,14 @@ const FooterSection = () => {
   const visible = items.filter(([, v]) => v && v.trim().length > 0);
   const copyrightName = data?.brand_name?.trim() || data?.business_name?.trim() || '사주 상담';
 
+  const brandName = data?.brand_name?.trim();
+
   return (
     <footer className="py-8 px-4 border-t border-border">
-      <div className="container mx-auto text-center space-y-3">
+      <div className="container mx-auto text-center space-y-2">
+        {brandName && (
+          <p className="text-sm font-semibold text-foreground/90">{brandName}</p>
+        )}
         {visible.length > 0 && (
           <div className="text-xs text-muted-foreground/80 leading-relaxed flex flex-wrap justify-center gap-x-3 gap-y-1">
             {visible.map(([label, value]) => (
